@@ -15,9 +15,7 @@ import statsRouter from "./routers/statsRouter";
 dotenv.config();
 const app = express();
 
-app.use(express.json()); // for parsing json (and create req.body etc)
-app.use(cookieParser()); // for parsing cookies
-app.use(express.urlencoded({ extended: true })); // for parsing URL-encoded request bodies
+app.set("trust proxy", 1);
 
 app.use(
     cors({
@@ -25,6 +23,11 @@ app.use(
         credentials: true,
     })
 );
+
+app.use(express.json()); // for parsing json (and create req.body etc)
+app.use(cookieParser()); // for parsing cookies
+app.use(express.urlencoded({ extended: true })); // for parsing URL-encoded request bodies
+
 
 app.use(
     session({
