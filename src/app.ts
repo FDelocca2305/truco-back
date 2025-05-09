@@ -19,17 +19,12 @@ app.use(express.json()); // for parsing json (and create req.body etc)
 app.use(cookieParser()); // for parsing cookies
 app.use(express.urlencoded({ extended: true })); // for parsing URL-encoded request bodies
 
-if (process.env.DEBUG === "true") { // for development
-    app.use(
-        cors(
-            {
-                origin: "http://localhost:3001", // Without this, the frontend can't access the backend
-                credentials: true, // Origin can't be "*" when using credentials
-            }
-        )
-    )
-    console.log("CORS enabled");
-}
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+    })
+);
 
 app.use(
     session({
@@ -45,7 +40,7 @@ app.use(
             httpOnly: true,
             maxAge: 1000 * 60 * 60 * 24, // 1 day
             sameSite: 'none',
-            secure: false
+            secure: process.env.NODE_ENV === "production"
         },
     })
 );
